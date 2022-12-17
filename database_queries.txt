@@ -1,0 +1,133 @@
+CREATE DATABASE films;
+
+CREATE TABLE parentCo (
+	parentID integer NOT NULL AUTO_INCREMENT,
+	name varchar(45) NOT NULL,
+	PRIMARY KEY (parentID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations)
+);
+
+CREATE TABLE filmStudios (
+	studioID smallint NOT NULL AUTO_INCREMENT,
+	name char NOT NULL,
+	locationID integer NOT NULL,
+	parentID integer NOT NULL,
+	PRIMARY KEY (studioID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations),
+	FOREIGN KEY (parentID) REFERENCES parentID(parentCo)
+);
+
+CREATE TABLE studioFilms (
+	filmID integer NOT NULL AUTO_INCREMENT,
+	name varchar(45) NOT NULL,
+	studioID smallint NOT NULL,
+	teamID integer NOT NULL,
+	release date NOT NULL,
+	runtime time NOT NULL,
+	genreID smallint NOT NULL,
+	timestamp timestamp NOT NULL,
+	PRIMARY KEY (filmID),
+	FOREIGN KEY (studioID) REFERENCES studioID(filmStudios),
+	FOREIGN KEY (teamID) REFERENCES teamID(creativeTeam),
+	FOREIGN KEY (genreID) REFERENCES genreID(genres)
+);
+
+CREATE TABLE genres (
+	genreID smallint NOT NULL AUTO_INCREMENT,
+	genre1 varchar(45) NOT NULL,
+	genre2 varchar(45),
+	genre3 varchar(45),
+	genre4 varchar(45)
+	PRIMARY KEY (genreID)
+);
+
+CREATE TABLE locations (
+	locationID integer NOT NULL AUTO_INCREMENT,
+	city varchar(45) NOT NULL,
+	state char NOT NULL,
+	country varchar(45) NOT NULL,
+	zip smallint NOT NULL,
+	streetNo smallint NOT NULL,
+	streetName varchar(45) NOT NULL,
+	aptNo char
+	PRIMARY KEY (locationID)
+);
+
+CREATE TABLE producers (
+	producerID integer NOT NULL AUTO_INCREMENT,
+	locationID integer NOT NULL,
+	firstName varchar(45),
+	lastName varchar(45),
+	PRIMARY KEY (producerID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations)
+);
+
+CREATE TABLE directors (
+	directorID integer NOT NULL AUTO_INCREMENT,
+	locationID integer NOT NULL,
+	firstName varchar(45),
+	lastName varchar(45),
+	PRIMARY KEY (directorID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations)
+);
+
+CREATE TABLE writers (
+	writerID integer NOT NULL AUTO_INCREMENT,
+	locationID integer NOT NULL,
+	firstName varchar(45),
+	lastName varchar(45),
+	PRIMARY KEY (writerID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations)
+);
+
+CREATE TABLE actors (
+	actorID integer NOT NULL AUTO_INCREMENT,
+	locationID integer NOT NULL,
+	firstName varchar(45),
+	lastName varchar(45),
+	PRIMARY KEY (actorID),
+	FOREIGN KEY (locationID) REFERENCES locationID(locations)
+);
+
+CREATE TABLE creativeTeam (
+	teamID integer NOT NULL AUTO_INCREMENT,
+	producerID integer NOT NULL,
+	directorID integer NOT NULL,
+	writerID integer NOT NULL,
+	actorID integer NOT NULL,
+	PRIMARY KEY (teamID),
+	FOREIGN KEY (producerID) REFERENCES producerID(producers),
+	FOREIGN KEY (directorID) REFERENCES directorID(directors,
+	FOREIGN KEY (writerID) REFERENCES writerID(writers),
+	FOREIGN KEY (actorID) REFERENCES actorID(actors)
+);
+
+INSERT INTO locations (locationID, city, state, country, zip, streetNo, streetName)
+VALUES ('01', 'New York City', 'New York', 'United States', '10003', '230', 'Park Avenue South')
+
+INSERT INTO parentCo (parentID, name, locationID)
+VALUES ('01', 'Warner Bros. Discovery', '01')
+
+INSERT INTO filmStudios (studioID, name, locationID, parentID)
+VALUES ('01', 'Warner Bros.', '01', '01')
+
+INSERT INTO producers (producerID, locationID, firstName, lastName)
+VALUES ('01', '01', 'Jan', 'Harlan')
+
+INSERT INTO directors (directorID, locationID, firstName, lastName)
+VALUES ('01', '01', 'Stanley', 'Kubrick')
+
+INSERT INTO writers (writerID, locationID, firstName, lastName)
+VALUES ('01', '01', 'Diane', 'Johnson')
+
+INSERT INTO actors (actorID, locationID, firstName, lastName)
+VALUES ('01', '01', 'Jack', 'Nicholson')
+
+INSERT INTO creativeTeam (teamID, producerID, directorID, writerID, actorID)
+VALUES ('01', '01', '01', '01', '01')
+
+INSERT INTO genres (genreID, genre1, genre2)
+VALUES ('01', 'Horror', 'Drama')
+
+INSERT INTO studioFilms (filmID, name, studioID, teamID, release, runtime, genreID, timestamp)
+VALUES ('01', 'The Shining', '01', '01', '1980-05-23', '02:26:00', '01', CURRENT_TIMESTAMP())
